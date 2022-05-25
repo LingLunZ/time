@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>台灣觀光紮根基礎期</title>
+</head>
+<body>
+ 
+  <h1>
+    台灣觀光紮根基礎期
+  </h1>
+  <h2>
+    1970-1979 | 紮根基礎：期設置觀光局及駐外辦事處，紮根厚實基底，觀光起飛，來台旅客首度破百萬。
+</h2>
+    
+  <h2>本網站參考蘭陽博物拐《印象‧蘭陽》紀載，以魚骨圖時間軸之方式呈現宜蘭歷史中的重要年代。</h2>
+<!-- Styles -->
+<style>
+#chartdiv {
+  width: 100%;
+  height: 500px;
+}
+</style>
+
+<!-- Resources -->
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/plugins/timeline.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+
+<!-- Chart code -->
+<script>
+am4core.ready(function() {
+
+// Themes begin
+am4core.useTheme(am4themes_animated);
+// Themes end
+
+var chart = am4core.create("chartdiv", am4plugins_timeline.CurveChart);
+chart.curveContainer.padding(0, 100, 0, 120);
+chart.maskBullets = false;
+
+var colorSet = new am4core.ColorSet();
+
+chart.data = [
+  {
+    "category": "",
+    "year": "1970",
+    "size": 1,
+    "text": "交通部觀光事業委員會提出「台灣地區觀光事業綜合開發計畫」，核定台北市、日月潭、阿里山、恆春及墾丁等5處優先開發觀光目標區。",
+    "desc": "成立第一個駐外辦事處「舊金山辦事處」，之後陸續成立東京、法蘭克福等駐外辦事處。"
+  }, 
+
+  {
+    "category": "",
+    "year": "1971",
+    "size": 1,
+    "text": "6月，交通部觀光事業委員會與台灣省觀光事業管理局合併改組為「交通部觀光事業局」。",
+    "desc": ""
+  }, 
+
+  {
+    "category": "",
+    "year": "1975",
+    "size": 1,
+    "text": "11月，訂定「風景區國民旅舍暨遊樂設施輔導管理辦法」，出租公有土地並補助相關單位興建國民旅舍，\n計有台大實驗林溪頭國民旅舍、烏山頭國民旅舍、日月潭青年活動中心等最具代表。",
+    "desc": ""
+  }, 
+
+  {
+    "category": "",
+    "year": "1976",
+    "size": 1,
+    "text": "12月28日，來台旅客首度突破100萬人次。",
+    "desc": ""
+  },
+
+  {
+    "category": "",
+    "year": "1977",
+    "size": 1,
+    "text": "7月，訂定「觀光旅館業管理規則」，將觀光旅館區分為國際觀光旅館及一般觀光旅館。",
+    "desc": "10月，訂定每年的農曆正月15日元宵節為觀光節。"
+  },
+
+  {
+    "category": "",
+    "year": "1978",
+    "size": 1,
+    "text": "2月，舉辦第一屆觀光節慶祝大會。",
+    "desc": "10月，台灣十大建設之一高速公路全線正式通車。"
+  },
+
+  {
+    "category": "",
+    "year": "1979",
+    "size": 1,
+    "text": "1月，開放國人出國觀光旅遊",
+    "desc": "2月，中正國際機場第一航廈啟用（2006年更名為台灣桃園國際機場）"
+  }
+
+
+
+];
+
+chart.dateFormatter.inputDateFormat = "yyyy";
+
+chart.fontSize = 12;
+chart.tooltipContainer.fontSize = 18;
+
+var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+categoryAxis.dataFields.category = "category";
+categoryAxis.renderer.grid.template.disabled = true;
+
+var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+dateAxis.renderer.points = [{ x: -400, y: 0 }, { x: 0, y: 50 }, { x: 400, y: 0 }]
+dateAxis.renderer.polyspline.tensionX = 0.8;
+dateAxis.renderer.grid.template.disabled = true;
+dateAxis.renderer.line.strokeDasharray = "1,4";
+dateAxis.baseInterval = {period:"day", count:1}; // otherwise initial animation will be not smooth
+
+dateAxis.renderer.labels.template.disabled = true;
+
+var series = chart.series.push(new am4plugins_timeline.CurveLineSeries());
+series.strokeOpacity = 0;
+series.dataFields.dateX = "year";
+series.dataFields.categoryY = "category";
+series.dataFields.value = "size";
+series.dataFields.desc = "desc";
+series.baseAxis = categoryAxis;
+
+var interfaceColors = new am4core.InterfaceColorSet();
+
+series.tooltip.pointerOrientation = "down";
+
+var distance = 80;
+var angle = 70;
+
+var bullet = series.bullets.push(new am4charts.Bullet());
+
+var line = bullet.createChild(am4core.Line);
+line.adapter.add("stroke", function(fill, target) {
+  if (target.dataItem) {
+    return chart.colors.getIndex(target.dataItem.index)
+  }
+});
+
+line.x1 = 0;
+line.y1 = 0;
+line.y2 = 0;
+line.x2 = distance - 10;
+line.strokeDasharray = "1,3";
+
+var circle = bullet.createChild(am4core.Circle);
+circle.radius = 30;
+circle.fillOpacity = 1;
+circle.strokeOpacity = 0;
+
+var circleHoverState = circle.states.create("hover");
+circleHoverState.properties.scale = 1.5;
+
+series.heatRules.push({ target: circle, min: 20, max: 20, property: "radius" });
+circle.adapter.add("fill", function(fill, target) {
+  if (target.dataItem) {
+    return chart.colors.getIndex(target.dataItem.index)
+  }
+});
+circle.tooltipText = "{text}\n{desc}";
+circle.adapter.add("tooltipY", function(tooltipY, target){
+  return -target.pixelRadius - 4;
+});
+
+var yearLabel = bullet.createChild(am4core.Label);
+yearLabel.text = "{year}";
+yearLabel.strokeOpacity = 0;
+yearLabel.fill = am4core.color("#fff");
+yearLabel.horizontalCenter = "middle";
+yearLabel.verticalCenter = "middle";
+yearLabel.interactionsEnabled = false;
+
+var label = bullet.createChild(am4core.Label);
+label.propertyFields.text = "text";
+label.strokeOpacity = 0;
+label.horizontalCenter = "right";
+label.verticalCenter = "middle";
+
+label.adapter.add("opacity", function(opacity, target) {
+  if(target.dataItem){
+    var index = target.dataItem.index;
+    var line = target.parent.children.getIndex(0);
+
+    if (index % 2 == 0) {
+      target.y = -distance * am4core.math.sin(-angle);
+      target.x = -distance * am4core.math.cos(-angle);
+      line.rotation = -angle - 180;
+      target.rotation = -angle;
+    }
+    else {
+      target.y = -distance * am4core.math.sin(angle);
+      target.x = -distance * am4core.math.cos(angle);
+      line.rotation = angle - 180;
+      target.rotation = angle;
+    }
+  }
+  return 1;
+});
+
+var outerCircle = bullet.createChild(am4core.Circle);
+outerCircle.radius = 50;
+outerCircle.fillOpacity = 0;
+outerCircle.strokeOpacity = 0;
+outerCircle.strokeDasharray = "1,3";
+
+var hoverState = outerCircle.states.create("hover");
+hoverState.properties.strokeOpacity = 0.8;
+hoverState.properties.scale = 1.5;
+
+outerCircle.events.on("over", function(event){
+  var circle = event.target.parent.children.getIndex(1);
+  circle.isHover = true;
+  event.target.stroke = circle.fill;
+  event.target.radius = circle.pixelRadius;
+  event.target.animate({property: "rotation", from: 0, to: 360}, 4000, am4core.ease.sinInOut);
+});
+
+outerCircle.events.on("out", function(event){
+  var circle = event.target.parent.children.getIndex(1);
+  circle.isHover = false;
+});
+
+chart.scrollbarX = new am4core.Scrollbar();
+chart.scrollbarX.opacity = 0.5;
+chart.scrollbarX.width = am4core.percent(50);
+chart.scrollbarX.align = "center";
+
+}); // end am4core.ready()
+</script>
+
+<!-- HTML -->
+<div id="chartdiv"></div>
+
+</body>
+</html>
